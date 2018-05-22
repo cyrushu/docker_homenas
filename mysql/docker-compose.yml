@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    restart: always
+    volumes:
+      - mysqldb:/var/lib/mysql
+    env_file:
+      - db.env
+    ports:
+      - 3306:3306
+
+volumes:
+  mysqldb:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/mysqldb

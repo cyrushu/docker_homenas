@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  radarr:
+    image: linuxserver/radarr
+    restart: always
+    volumes:
+      - radconf:/config
+      - raddownloads:/downloads
+      - radmovies:/movies
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    ports:
+      - 8080:80 
+      - 7878:7878
+
+volumes:
+  radconf:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/radarr/conf
+  raddownloads:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/radarr/downloads
+  radmovies:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/radarr/movies

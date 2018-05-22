@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  transmission:
+    image: linuxserver/transmission
+    restart: always
+    volumes:
+      - trconf:/config
+      - trdata:/downloads
+      - trwatch:/watch
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+
+volumes:
+  trconf:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/transmission_conf
+  trdata:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/transmission_data
+  trwatch:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/transmission_watch

@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - nextclouddb:/var/lib/mysql
+    env_file:
+      - db.env
+
+  app:  
+    image: nextcloud:fpm
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - MYSQL_HOST=
+    env_file:
+      - db.env
+    depends_on:
+      - db
+
+  web:
+    build: ./web
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - nextcloud:/var/www/html:ro
+    environment:
+      - VIRTUAL_HOST=
+      - LETSENCRYPT_HOST=
+      - LETSENCRYPT_EMAIL=
+    depends_on:
+      - app
+    networks:
+      - default
+
+volumes:
+  nextclouddb:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/nextclouddb
+  nextcloud:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /path/to/nextclouddata
